@@ -1,16 +1,37 @@
 #include <Arduino.h>
 #include <unity.h>
 
-void test_basic_assert_true(void) {
-    TEST_ASSERT_TRUE(1);
+void setUp(void) {
+  // set stuff up here
 }
 
+void tearDown(void) {
+  // clean stuff up here
+}
+
+void test_function_should_doBlahAndBlah(void) {
+  // test stuff
+}
+
+void test_function_should_doAlsoDoBlah(void) {
+  // more test stuff
+}
+
+int runUnityTests(void) {
+  UNITY_BEGIN();
+  RUN_TEST(test_function_should_doBlahAndBlah);
+  RUN_TEST(test_function_should_doAlsoDoBlah);
+  return UNITY_END();
+}
+
+/**
+  * For Arduino framework
+  */
 void setup() {
-    UNITY_BEGIN();
-    RUN_TEST(test_basic_assert_true);
-    UNITY_END();
-}
+  // Wait ~2 seconds before the Unity test runner
+  // establishes connection with a board Serial interface
+  delay(2000);
 
-void loop() {
-    // not used
+  runUnityTests();
 }
+void loop() {}
