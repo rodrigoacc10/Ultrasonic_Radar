@@ -1,15 +1,12 @@
-# Guide 
+# Guide
 
 Unity Test is a unit testing framework built for C, with a focus on working with embedded toolchains.
 
 Commands:
 
-```
+```code
 pio run -t clean
 pio test -e uno -v
 ```
 
 [PlatformIO Unity](https://docs.platformio.org/en/latest/advanced/unit-testing/frameworks/unity.html)
-
-
-

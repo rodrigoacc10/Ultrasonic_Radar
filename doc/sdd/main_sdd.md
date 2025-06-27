@@ -28,6 +28,7 @@ The main application module coordinates ultrasonic radar distance measurement, s
 
 - `Servo baseServo`: Controls the radar's servo motor.
 - `Ucglib_ST7735_18x128x160_HWSPI ucg`: LCD display object.
+- `const char* message1[2]`, `message2[2]`, `message3[2]`: Welcome and author messages displayed on the LCD at startup.
 
 ---
 
@@ -36,64 +37,35 @@ The main application module coordinates ultrasonic radar distance measurement, s
 ### 1. setup
 
 - **Prototype:** `void setup(void);`
-- **Description:** Initializes serial communication, LCD, pins, and servo. Performs a test sweep of the servo.
+- **Description:** Initializes the LCD with welcome messages, serial communication, LCD, and IO hardware (servo and ultrasonic module).
 - **Implementation Details:**
+  - Calls `lcd_initialize(&ucg, message1, message2, message3)` to display welcome messages.
   - Calls `Serial_Init()` and `lcd_setup(&ucg)`.
-  - Sets pin modes for ultrasonic sensor.
-  - Attaches and initializes the servo.
-  - Sweeps the servo from start to max angle for initial test.
+  - Calls `iohw_setup(&baseServo)` to initialize IO hardware, including the servo and ultrasonic module.
 
 **Pseudocode:**
 
 ```cpp
 function setup():
+    lcd_initialize(&ucg, message1, message2, message3)
     Serial_Init()
     lcd_setup(&ucg)
-    pinMode(trigPin, OUTPUT)
-    pinMode(echoPin, INPUT)
-    baseServo.attach(ServoPin)
-    baseServo.write(ServoInitAngle)
-    for x = StartServoAngle to MaxServoAngle step ServoInitStep:
-        baseServo.write(x)
-        delay(delayTime)
+    iohw_setup(&baseServo)
 ```
 
 ---
 
-### 2. calculateDistance
-
-- **Prototype:** `int calculateDistance();`
-- **Description:** Measures distance using the ultrasonic sensor.
-- **Implementation Details:**
-  - Triggers the ultrasonic sensor and measures echo time.
-  - Converts echo time to distance using the speed of sound.
-
-**Pseudocode:**
-
-```cpp
-function calculateDistance():
-    digitalWrite(trigPin, LOW)
-    delayMicroseconds(Two_us)
-    digitalWrite(trigPin, HIGH)
-    delayMicroseconds(Ten_us)
-    digitalWrite(trigPin, LOW)
-    duration = pulseIn(echoPin, HIGH)
-    return DISTANCE_CALC(duration)
-```
-
----
-
-### 3. loop
+### 2. loop
 
 - **Prototype:** `void loop(void);`
-- **Description:** Main control loop. Sweeps the servo back and forth, measures distance, updates LCD and serial output.
+- **Description:** Main control loop. Sweeps the servo back and forth, measures distance, updates LCD and serial output using IO hardware abstraction.
 - **Implementation Details:**
   - Draws radar background and fixed labels.
   - Sweeps servo from max to min angle, then min to max.
   - For each angle:
     - Moves servo
     - Draws scanline
-    - Measures distance
+    - Measures distance using `iohw_calculateDistance()`
     - Prints radar data to serial
     - Draws radar point on LCD
   - Clears and redraws background between sweeps.
@@ -107,7 +79,7 @@ function loop():
     for x = MaxServoAngle downto MinServoAngleRange step ServoStep:
         baseServo.write(x)
         lcd_DrawScanlines(&ucg, x, Xcent, base, scanline, false)
-        distance = calculateDistance()
+        distance = iohw_calculateDistance()
         Serial_PrintRadar(x, distance)
         lcd_PrintPoint(&ucg, x, distance, Xcent, base)
     delay(delayTime)
@@ -117,7 +89,7 @@ function loop():
     for x = MinServoAngle to MaxServoAngleRange step ServoStep:
         baseServo.write(x)
         lcd_DrawScanlines(&ucg, x, Xcent, base, scanline, true)
-        distance = calculateDistance()
+        distance = iohw_calculateDistance()
         Serial_PrintRadar(x, distance)
         lcd_PrintPoint(&ucg, x, distance, Xcent, base)
     delay(delayTime)
@@ -130,6 +102,7 @@ function loop():
 
 - LCD display module (`lcd.h`)
 - Serial communication module (`serial.h`)
+- IO hardware abstraction module (`io_hw.h`)
 - Servo and SPI libraries
 - Ucglib graphics library
 
@@ -137,7 +110,7 @@ function loop():
 
 ## Usage Flow
 
-1. System initializes hardware and performs a servo sweep.
+1. System initializes LCD with welcome messages, serial, and IO hardware.
 2. Main loop alternates sweeping the servo left and right.
 3. At each angle, the system measures distance, updates the LCD, and prints data to serial.
 
@@ -145,7 +118,7 @@ function loop():
 
 ## Example Output
 
-- LCD displays radar sweep, scanlines, and detected points.
+- LCD displays welcome messages, radar sweep, scanlines, and detected points.
 - Serial monitor outputs: `Degree:  90    ,Distance:   150`
 
 ---

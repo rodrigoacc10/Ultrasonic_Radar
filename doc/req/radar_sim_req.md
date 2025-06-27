@@ -80,10 +80,19 @@ This document outlines the requirements for the Radar Simulation System, which p
 
 ## 6. Memory Usage Targets and Status
 
+**Without Welcome Function:**
+
 | Memory Type | Target Usage         | Total Size (bytes) | Current Usage (%) | Current Used (bytes) |
 |-------------|---------------------|--------------------|-------------------|----------------------|
 | RAM         | < 80%               | 2048               | 34.8%             | 712                  |
 | Flash       | < 90%               | 32256              | 76.1%             | 24538                |
+
+**With Welcome Function:**
+
+| Memory Type | Target Usage         | Total Size (bytes) | Current Usage (%) | Current Used (bytes) |
+|-------------|---------------------|--------------------|-------------------|----------------------|
+| RAM         | < 80%               | 2048               | 38.5%             | 788                  |
+| Flash       | < 90%               | 32256              | 82.6%             | 26652                |
 
 ---
 
