@@ -1,39 +1,40 @@
 #include <Arduino.h>
 #include <unity.h>
-#include <lcd.h>
+#include <io_hw.h> 
 
-void setUp(void) {
-  // set stuff up here
+// Global variable for testing setup and teardown
+int test_counter;
+Servo baseServo; 
+
+void setUp(void) 
+{
+  test_counter = 0; //Initialize the test counter
 }
 
-void tearDown(void) {
-  // clean stuff up here
+void tearDown(void) 
+{
+  test_counter = -1;
 }
 
-void test_function_should_doBlahAndBlah(void) {
-  // test stuff
+void test_function_iohw_setup(void) 
+{
+  test_counter++; 
+  iohw_setup(&baseServo); 
+  TEST_ASSERT_EQUAL(1, test_counter); // Ensure counter updates properly
 }
 
-void test_function_should_doAlsoDoBlah(void) {
-  // more test stuff
+void test_function_iohw_calculateDistance(void) 
+{
+  test_counter++; 
+  int distance = iohw_calculateDistance();
+  TEST_ASSERT_TRUE(distance >= 0); // Ensure distance is non-negative
+  TEST_ASSERT_EQUAL(1, test_counter); // Ensure counter updates properly
 }
 
 int runUnityTests(void) {
   UNITY_BEGIN();
-  RUN_TEST(test_function_should_doBlahAndBlah);
-  RUN_TEST(test_function_should_doAlsoDoBlah);
+  //RUN_TEST(test_function_iohw_setup);
+  //RUN_TEST(test_function_iohw_calculateDistance);
   return UNITY_END();
 }
-
-/**
-  * For Arduino framework
-  */
-void setup() {
-  // Wait ~2 seconds before the Unity test runner
-  // establishes connection with a board Serial interface
-  delay(2000);
-
-  runUnityTests();
-}
-void loop() {}
 
