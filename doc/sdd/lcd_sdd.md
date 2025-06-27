@@ -127,7 +127,7 @@ function lcd_cls(ucg):
   - `distance`: Distance in centimeters.
 - **Return:** None
 - **Implementation Details:**
-  - Prints "DEG: <degree>" and "<distance>cm" at fixed positions with blue color.
+  - Prints "DEG: ***degree***" and "***distance*** cm" at fixed positions with blue color.
 
 ---
 
