@@ -14,9 +14,9 @@ pipeline {
                 echo 'Testing..'
             }
         }
-        stage('Tagging stable') {
+        stage('Tagging qa') {
             when {
-                branch 'stable' 
+                branch 'qa' 
             }
             steps {  
                 echo 'Creating Tag'            
@@ -28,7 +28,7 @@ pipeline {
                 echo 'Tagging branch'    
                 sh "git tag ${TAG_VERSION}"
                    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
-                        sh '''git remote set-url origin https://${TOKEN}@github.com/lruizv/arduino_ultrasonic_radar.git'''
+                        sh '''git remote set-url origin https://${TOKEN}@github.com/rodrigoacc10/Ultrasonic_Radar.git'''
                         sh '''git push origin --tags'''
                     }
             }
