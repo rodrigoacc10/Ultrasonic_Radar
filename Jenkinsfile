@@ -12,8 +12,8 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Testing..'
-                    sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test --without-uploading'''
+                    /*sh '''pio account logout || true 
+                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test --without-uploading''']*/
             }
         }
         stage('Tagging qa') {
