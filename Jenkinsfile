@@ -5,8 +5,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                       sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run -r ''' 
+                       /*sh '''pio account logout || true 
+                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run -r '''*/ 
             }
         }
         stage('Test') {
@@ -29,6 +29,7 @@ pipeline {
                 }
                 echo 'Tagging branch'    
                 sh "git tag ${TAG_VERSION}"
+                echo "Global variable value: ${env.GIT_REPO}"
                    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
                         sh '''git remote set-url origin https://${TOKEN}@github.com/rodrigoacc10/Ultrasonic_Radar.git'''
                         sh '''git push origin --tags'''
@@ -44,8 +45,8 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                sh '''pio account logout || true 
-                PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run --environment uno --target upload'''
+                /*sh '''pio account logout || true 
+                PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run --environment uno --target upload'''*/
             }
         }
     }
