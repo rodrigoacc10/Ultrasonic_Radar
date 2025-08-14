@@ -28,10 +28,10 @@ pipeline {
                     echo "Generated version: ${TAG_VERSION}" 
                 }
                 echo 'Tagging branch'    
-                sh "git tag ${TAG_VERSION}"
+                //sh "git tag ${TAG_VERSION}"
                 echo "Global variable value: ${env.GIT_REPO}"
                    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
-                        def URLTEXT = "https://${TOKEN}${env.GIT_REPO}"
+                        URLTEXT = "https://${TOKEN}${env.GIT_REPO}"
                         echo "URL: ${URLTEXT}"
                         sh "git remote set-url origin ${URLTEXT}"
                         //sh '''git push origin --tags'''
