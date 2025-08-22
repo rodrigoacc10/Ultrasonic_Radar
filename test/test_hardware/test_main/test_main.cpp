@@ -1,12 +1,12 @@
-#include <Arduino.h>
-#include <unity.h>
+extern "C" {
+    #include "unity.h"
+}
 #include <serial.h>
 
 // Global variable for testing setup and teardown
 int test_counter;
 
-void setUp(void) 
-{
+void setUp() {
   test_counter = 0; //Initialize the test counter
 }
 
@@ -48,12 +48,10 @@ void test_function_serial3(void)
   TEST_ASSERT_EQUAL(1, test_counter); // Ensure counter updates properly
 }
 
-
-int runUnityTests(void) 
-{
+int main() {
   UNITY_BEGIN();
   RUN_TEST(test_function_serial);
-  //RUN_TEST(test_function_serial2);
-  //RUN_TEST(test_function_serial3);    
+  RUN_TEST(test_function_serial2);
+  RUN_TEST(test_function_serial3);    
   return UNITY_END();
 }
