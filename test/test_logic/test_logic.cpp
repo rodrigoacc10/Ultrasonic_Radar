@@ -1,20 +1,22 @@
 #include <gtest/gtest.h>
 
-// Function under test
+
+/********************************************************/
+/*                       Functions                      */
+/********************************************************/
+
+/* Math Functions */
 int add(int a, int b) {
     return a + b;
 }
 
-bool is_even(int x) {
-    return x % 2 == 0;
+int substract(int a, int b) {
+    return a - b;
 }
 
-int max_of_three(int a, int b, int c) {
-    return std::max(a, std::max(b, c));
-}
-
-std::string greet(const std::string& name) {
-    return "Hello, " + name;
+int lessthan(int a, int b) {
+    if (a < b) return 1;
+    return 0;
 }
 
 double divide(double a, double b) {
@@ -22,26 +24,42 @@ double divide(double a, double b) {
     return a / b;
 }
 
-// Test cases
+/* String/Serial Functions */
+std::string greet(const std::string& name) {
+    return "Hello, " + name;
+}
+
+std::string printdegree(const std::string& value) {
+    return "Degree:  " + value;
+}
+
+std::string printdistance(const std::string& value) {
+    return "    ,Distance:   " + value;
+}
+
+/* Radar Functions */
+float distance_point(int a) {
+    return a * 0.034 / 2;
+}
+
+/********************************************************/
+/*                       Test Cases                     */
+/********************************************************/
 
 TEST(MathTest, AdditionIsCorrect) {
     EXPECT_EQ(add(2, 3), 5);
     EXPECT_EQ(add(-1, 1), 0);
 }
 
-TEST(MathTest, EvenCheckWorks) {
-    EXPECT_TRUE(is_even(4));
-    EXPECT_FALSE(is_even(7));
+TEST(MathTest, SubstractIsCorrect) {
+    EXPECT_EQ(substract(2, 3), -1);
+    EXPECT_EQ(substract(-1, 1), -2);
 }
 
-TEST(MathTest, MaxOfThreeReturnsLargest) {
-    EXPECT_EQ(max_of_three(1, 5, 3), 5);
-    EXPECT_EQ(max_of_three(9, 2, 7), 9);
-}
-
-TEST(StringTest, GreetingIsFormattedCorrectly) {
-    EXPECT_EQ(greet("Rodrigo"), "Hello, Rodrigo");
-    EXPECT_NE(greet("World"), "Hi, World");
+TEST(MathTest, LessthanIsCorrect) {
+    EXPECT_EQ(lessthan(2, 3), 1);
+    EXPECT_EQ(lessthan(-1, 1), 1);
+    EXPECT_EQ(lessthan(1, 1), 0);
 }
 
 TEST(MathTest, DivisionHandlesZeroSafely) {
@@ -49,7 +67,29 @@ TEST(MathTest, DivisionHandlesZeroSafely) {
     EXPECT_THROW(divide(5.0, 0.0), std::invalid_argument);
 }
 
-// Main runner
+TEST(StringTest, GreetingIsFormattedCorrectly) {
+    EXPECT_EQ(greet("Rodrigo"), "Hello, Rodrigo");
+    EXPECT_NE(greet("World"), "Hi, World");
+}
+
+TEST(StringTest, PrintDegreeIsFormattedCorrectly) {
+    EXPECT_EQ(printdegree("180"), "Degree:  180");
+    EXPECT_NE(printdegree("90"), "Degree:  90C");
+}
+
+TEST(StringTest, PrintDistanceIsFormattedCorrectly) {
+    EXPECT_EQ(printdistance("180"), "    ,Distance:   180");
+    EXPECT_NE(printdistance("90"), "Distance:     90");
+}
+
+TEST(RadarTest, DistanceIsCalculatedCorrectly) {
+    EXPECT_FLOAT_EQ(distance_point(10), 0.17);
+    EXPECT_FLOAT_EQ(distance_point(20), 0.34);
+}
+
+/********************************************************/
+/*                       Main runner                    */
+/********************************************************/
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();

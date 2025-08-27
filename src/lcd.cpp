@@ -74,7 +74,7 @@ void lcd_setup(Ucglib_ST7735_18x128x160_HWSPI *ucg)
     ucg->setColor(0, 255, 0);
 
     ucg->print("OK!");
-    delay(500);
+    //delay(500);
     ucg->setColor(0, 0, 0, 0);
     ucg->setColor(1, 0, 0, 0);
     ucg->setColor(2, 0, 0, 0);

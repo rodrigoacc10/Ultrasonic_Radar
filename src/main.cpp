@@ -72,12 +72,15 @@ void loop(void)
       //Draw the point corresponding to the distance value
       lcd_PrintPoint(&ucg,x,distance,Xcent,base);
 
+      delay(delayMovement);     //Delay for Movement
+
     }
 
   delay(delayTime);     //Delay for a while to allow the servo to stabilize
   lcd_cls(&ucg);          //Clear the LCD screen
   lcd_background(&ucg,Xcent,base,Xmax); //Draw the background of the LCD screen
   lcd_fix_font(&ucg);          //Repaint screen background elements
+  delay(delayTime);     //Delay for a while to allow the servo to stabilize
   
   for (int  x=MinServoAngle; x < MaxServoAngleRange; x+=ServoStep)
     {     
@@ -95,6 +98,9 @@ void loop(void)
       
       //Draw the point corresponding to the distance value
       lcd_PrintPoint(&ucg,x,distance,Xcent,base);
+
+      delay(delayMovement);     //Delay for Movement
+            
     }
 
   delay(delayTime);   //Delay for a while to allow the servo to stabilize
