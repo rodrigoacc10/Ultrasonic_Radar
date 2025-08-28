@@ -26,14 +26,12 @@ pipeline {
                     def date = new Date().format("yyyy-MM-dd'T'HHmm") // Format the date as yyyy-MM-ddTHHmm
                     TAG_VERSION = "jenkins-v-${date}"
                     echo "Generated version: ${TAG_VERSION}" 
-                    URLTEXT = "https://${TOKEN}${env.GIT_REPO}"
                 }
                 echo 'Tagging branch'    
                 //sh "git tag ${TAG_VERSION}"
                 echo "Global variable value: ${env.GIT_REPO}"
                    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
-                        echo "URL: ${URLTEXT}"
-                        sh "git remote set-url origin ${URLTEXT}"
+                        sh "git remote set-url origin https://${TOKEN}${env.GIT_REPO}"
                         //sh '''git push origin --tags'''
                     }
             }
