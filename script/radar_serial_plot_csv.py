@@ -8,20 +8,27 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.animation import FuncAnimation
 import csv  # For writing data into a CSV file
+import os
+from pathlib import Path
 
 # Global variables
 degrees = []
 distances = []
 run_plot = False  # Controls the serial communication loop
-csv_file = "serial_data.csv"  # File name for the CSV file
+# Define path relative to script location
+repo_root = Path(__file__).resolve().parent
+csv_file = repo_root / "logs" / "serial_data.csv"  # File name for the CSV file
 
 # Function to initialize the CSV file
 def initialize_csv():
     try:
         with open(csv_file, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow(["Degree", "Distance"])  # Write headers
+            writer.writerow(["Degree (°C)", "Distance (cm)"])  # Write headers
+            file.flush()
+            os.fsync(file.fileno())
     except Exception as e:
+        print(f"Error initializing CSV file: {e}")
         messagebox.showerror("Error", f"Failed to initialize CSV file:\n{e}")
 
 # Function to append data to the CSV file
@@ -29,8 +36,12 @@ def append_to_csv(degree, distance):
     try:
         with open(csv_file, mode='a', newline='') as file:
             writer = csv.writer(file)
-            writer.writerow([degree, distance])
+            writer.writerow([f"{degree}", f"{distance}"])  # Write data
+            print(f"Logged to CSV: Degree={degree} °C, Distance={distance} cm")
+            file.flush()
+            os.fsync(file.fileno())
     except Exception as e:
+        print(f"Error writing to CSV file: {e}")
         messagebox.showerror("Error", f"Failed to write to CSV file:\n{e}")
 
 # Function to read data from serial port
@@ -54,6 +65,7 @@ def read_serial(port, baudrate):
 
                         # Write data to the CSV file
                         append_to_csv(degree, distance)
+                        
 
                         # Limit the size of the data lists for memory efficiency
                         if len(degrees) > 100:
@@ -84,6 +96,7 @@ def start_reading():
 # Function to stop the reading process
 def stop_reading():
     global run_plot
+    print("Saving to:", os.path.abspath(csv_file))
     run_plot = False
 
 # Function to update the plot in real-time

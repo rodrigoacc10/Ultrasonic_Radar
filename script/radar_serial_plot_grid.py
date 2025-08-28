@@ -36,7 +36,7 @@ def read_serial():
                         distances.append(distance)
 
                         # Limit the size of the data lists for memory efficiency
-                        if len(degrees) > 100:
+                        if len(degrees) > 180:
                             degrees.pop(0)
                             distances.pop(0)
                 except (ValueError, IndexError):
@@ -63,7 +63,7 @@ def stop_reading():
 def update_plot(frame):
     plt.cla()  # Clear axis for updated plot
     plt.xlim(0, 180)
-    plt.ylim(0, 150)
+    plt.ylim(0, 200)
     plt.xlabel("Degrees")
     plt.ylabel("Distance")
     plt.title("Ultrasonic Radar Points Plot")

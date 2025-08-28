@@ -1,37 +1,54 @@
+# Project Header Files: lcd.h and serial.h
 
-This directory is intended for project header files.
+This directory contains key header files for the project, providing interfaces for LCD display control and serial communication. Below are descriptions of each file and their main functions.
 
-A header file is a file containing C declarations and macro definitions
-to be shared between several project source files. You request the use of a
-header file in your project source file (C, C++, etc) located in `src` folder
-by including it, with the C preprocessing directive `#include'.
+---
 
-```src/main.c
+## lcd.h
 
-#include "header.h"
+The `lcd.h` header file provides the interface for controlling an ST7735-based LCD display using the Ucglib graphics library in C++. It declares several functions for initializing the display, clearing the screen, drawing backgrounds, printing radar data, and rendering scanlines.
 
-int main (void)
-{
- ...
-}
-```
+**Main Functions:**
 
-Including a header file produces the same results as copying the header file
-into each source file that needs it. Such copying would be time-consuming
-and error-prone. With a header file, the related declarations appear
-in only one place. If they need to be changed, they can be changed in one
-place, and programs that include the header file will automatically use the
-new version when next recompiled. The header file eliminates the labor of
-finding and changing all the copies as well as the risk that a failure to
-find one copy will result in inconsistencies within a program.
+- `lcd_setup(Ucglib_ST7735_18x128x160_HWSPI *ucg)`: Initializes the LCD display with the provided Ucglib object.
+- `lcd_cls(Ucglib_ST7735_18x128x160_HWSPI *ucg)`: Clears the LCD screen by filling it with a black color.
+- `lcd_fix_font(Ucglib_ST7735_18x128x160_HWSPI *ucg)`: Sets the font color and prints fixed text on the LCD.
+- `lcd_background(Ucglib_ST7735_18x128x160_HWSPI *ucg, int Xcent, int base, int Xmax)`: Draws a background image and scale.
+- `lcd_PrintRadar(Ucglib_ST7735_18x128x160_HWSPI *ucg, int degree, int distance)`: Prints radar information (angle and distance).
+- `lcd_PrintPoint(Ucglib_ST7735_18x128x160_HWSPI *ucg, int degree, int distance, int Xcent, int base)`: Prints a radar point at a specific location.
+- `lcd_DrawScanlines(Ucglib_ST7735_18x128x160_HWSPI *ucg, int degree, int Xcent, int base, int scanline, bool direction)`: Draws radar scanlines based on angle and direction.
 
-In C, the convention is to give header files names that end with `.h'.
+All functions require a pointer to a `Ucglib_ST7735_18x128x160_HWSPI` object, which manages hardware SPI communication with the display.
 
-Read more about using header files in official GCC documentation:
+---
 
-* Include Syntax
-* Include Operation
-* Once-Only Headers
-* Computed Includes
+## serial.h
 
-https://gcc.gnu.org/onlinedocs/cpp/Header-Files.html
+The `serial.h` header file provides the interface for serial communication, typically used for debugging or data output to a serial monitor.
+
+**Main Functions:**
+
+- `Serial_Init(void)`: Initializes the serial port for communication.
+- `Serial_PrintRadar(int degree, int distance)`: Prints radar data (angle and distance) to the serial monitor.
+
+These functions are useful for monitoring radar data and debugging via a serial interface.
+
+---
+
+## io_hw.h
+
+The `io_hw.h` header file provides the interface for hardware I/O operations, such as controlling pins, reading sensors, and managing peripherals. It declares functions for initializing hardware, setting pin modes, reading and writing digital values, and handling ultrasonic sensor measurements.
+
+**Main Functions:**
+
+- `io_hw_setup()`: Initializes hardware I/O, configures pins and peripherals.
+- `io_hw_set_pin_mode(int pin, int mode)`: Sets the mode (input/output) for a specified pin.
+- `io_hw_write(int pin, int value)`: Writes a digital value to a specified pin.
+- `io_hw_read(int pin)`: Reads a digital value from a specified pin.
+- `io_hw_measure_distance()`: Triggers an ultrasonic sensor and returns the measured distance.
+
+These functions are essential for interacting with the microcontroller's hardware, enabling sensor readings and actuator control for the radar system.
+
+---
+
+Include these header files in your source code to access LCD display and serial communication functionality as needed for your project.

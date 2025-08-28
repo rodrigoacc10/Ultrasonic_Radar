@@ -1,4 +1,4 @@
-# Diagram
+# Repository Structure
 
 ```mermaid
 flowchart TB
@@ -103,4 +103,6 @@ flowchart TB
     classDef test fill:#ffedcc,stroke:#333,stroke-width:1px;
 ```
 
-Created using: [https://gitdiagram.com/](https://gitdiagram.com/)
+***
+
+*Created using: [https://gitdiagram.com/](https://gitdiagram.com/)*
