@@ -26,7 +26,7 @@
 #define  ServoInitStep 5    //Initial servo step size for the first iteration
 #define  ServoInitAngle 90   //Initial servo angle
 #define  delayTime 50         //Delay time for servo movement
-
+#define  delayMovement 5         //Delay time for servo movement
 /**
  * Function Name: iohw_setup
  *

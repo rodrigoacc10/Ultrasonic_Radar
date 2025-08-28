@@ -139,34 +139,36 @@ Ultrasonic_Radar/
 │   │   └── req/
 │   │       └── radar_sim_req.md         # Project Requirements
 │   │   └── sdd/
-│   │       └── lcd_sdd.md              # LCD module software detailed design
-│   │       └── iohw_sdd.md             # IOHW module software detailed design
-│   │       └── main_sdd.md             # Main module software detailed design
+│   │       ├── lcd_sdd.md              # LCD module software detailed design
+│   │       ├── iohw_sdd.md             # IOHW module software detailed design
+│   │       ├── main_sdd.md             # Main module software detailed design
 │   │       └── serial_sdd.md           # Serial module software detailed design
 │   │   └── tst/
 │   │       └── radar_sim_tst.md         # Project Test
 │   │   └── RepoStructure.md             # Repository Structure
 │   ├── include/
-│   │   └── lcd.h                      # LCD module header
-│   │   └── io_hw.h                    # IOHW module header
-│   │   └── serial.h                   # Serial module header
+│   │   ├── lcd.h                      # LCD module header
+│   │   ├── io_hw.h                    # IOHW module header
+│   │   ├── serial.h                   # Serial module header
 │   │   └── README.md                  # readme
 │   ├── lib/                           # External libraries
 │   ├── script/
 │   │   └── radar_serial_plot_grid.py  # Python serial plotter script
 │   ├── src/
 │   │   ├── lcd.cpp                    # LCD module implementation
-│   │   └── main.cpp                   # Main code
+│   │   ├── main.cpp                   # Main code
 │   │   ├── io_hw.cpp                  # IOHW module implementation
-│   │   ├── serial.cpp                 # Serial module implementation
+│   │   └── serial.cpp                 # Serial module implementation
 │   ├── test/
-│   │   └── test_main/
-│   │       └── test_main.cpp          # Test code
-│   │   └── test_lcd/
-│   │       └── test_lcd.cpp          # Test code
+│   │   └── test_hardware/
+│   │       ├── test_main.cpp          # Test code
+│   │       ├── test_servo.cpp         # Test code
+│   │       └── test_lcd.cpp           # Test code
 │   │   └── test_servo/
-│   │       └── test_servo.cpp          # Test code
+│   │       └── test_logic.cpp           # Test code
 │   ├── .gitignore                       # Git ignore file
 │   ├── platformio.ini                   # Project configuration
+│   ├── Build_Load.cmd                   # Project Build and Load Script
+│   ├── Run_Test.cmd                     # Project Testing Script
 │   └── README.md                        # Project guide and documentation
 ```

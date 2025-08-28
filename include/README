@@ -35,4 +35,20 @@ These functions are useful for monitoring radar data and debugging via a serial 
 
 ---
 
+## io_hw.h
+
+The `io_hw.h` header file provides the interface for hardware I/O operations, such as controlling pins, reading sensors, and managing peripherals. It declares functions for initializing hardware, setting pin modes, reading and writing digital values, and handling ultrasonic sensor measurements.
+
+**Main Functions:**
+
+- `io_hw_setup()`: Initializes hardware I/O, configures pins and peripherals.
+- `io_hw_set_pin_mode(int pin, int mode)`: Sets the mode (input/output) for a specified pin.
+- `io_hw_write(int pin, int value)`: Writes a digital value to a specified pin.
+- `io_hw_read(int pin)`: Reads a digital value from a specified pin.
+- `io_hw_measure_distance()`: Triggers an ultrasonic sensor and returns the measured distance.
+
+These functions are essential for interacting with the microcontroller's hardware, enabling sensor readings and actuator control for the radar system.
+
+---
+
 Include these header files in your source code to access LCD display and serial communication functionality as needed for your project.

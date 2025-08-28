@@ -2,11 +2,28 @@
 
 Unity Test is a unit testing framework built for C, with a focus on working with embedded toolchains.
 
-Commands:
+Ultrasonic_Radar/
+├── Ultrasonic_Radar/
+│   ├── test/
+│   │   └── test_hardware/
+│   │       └── Uses Unity and Atmel Board
+│   │   └── test_logic/
+│   │       └── Uses Gtest and PC Only
+
+## Commands for Hardware Testing
 
 ```code
 pio run -t clean
-pio test -e uno -v
+pio test -e uno -vvv
 ```
+
+## Commands for Logic Testing
+
+```code
+pio run -t clean
+pio test -e native -vvv
+```
+
+## References
 
 [PlatformIO Unity](https://docs.platformio.org/en/latest/advanced/unit-testing/frameworks/unity.html)

@@ -32,7 +32,7 @@ def read_serial(port, baudrate):
                         distances.append(distance)
 
                         # Limit the size of the data lists for memory efficiency
-                        if len(degrees) > 100:
+                        if len(degrees) > 180:
                             degrees.pop(0)
                             distances.pop(0)
                 except (ValueError, IndexError):
