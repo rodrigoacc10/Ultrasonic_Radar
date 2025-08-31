@@ -5,15 +5,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                       /*sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run -r '''*/ 
+                       sh '''pio run -e uno_lrv -vvv'''
             }
         }
-        stage('Test') {
+        stage('HW Test') {
             steps {
                 echo 'Testing..'
-                    /*sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test --without-uploading''']*/
+                    sh '''pio account logout || true 
+                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test -e uno_lrv -vvv'''
             }
         }
         stage('Tagging qa') {
@@ -28,11 +27,11 @@ pipeline {
                     echo "Generated version: ${TAG_VERSION}" 
                 }
                 echo 'Tagging branch'    
-                //sh "git tag ${TAG_VERSION}"
+                sh "git tag ${TAG_VERSION}"
                 echo "Global variable value: ${env.GIT_REPO}"
                    withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
                         sh "git remote set-url origin https://${TOKEN}${env.GIT_REPO}"
-                        //sh '''git push origin --tags'''
+                        sh '''git push origin --tags'''
                     }
             }
         }
