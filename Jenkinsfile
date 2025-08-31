@@ -4,7 +4,9 @@ pipeline {
     stages {
         stage('Authentication') {
             steps {
-                    script {
+                echo 'Exporting token...'
+                sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
+                    /*script {
                         def userInput = input(id: 'myInput', message: 'Please select remote target:', parameters: [
                         [$class: 'ChoiceParameterDefinition', name: 'target', choices: 'MX\nMCH', description: 'Choose the target environment']
                     ])
@@ -21,7 +23,7 @@ pipeline {
                             echo "Deploying to Other"
                             sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
                         }
-                    }
+                    }*/
                        
             }
         }
