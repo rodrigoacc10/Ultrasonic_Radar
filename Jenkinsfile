@@ -5,15 +5,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building...'
-                       /*sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run -r '''*/ 
+                       sh '''pio run -e uno_lrv -vvv'''
             }
         }
-        stage('Test') {
+        stage('HW Test') {
             steps {
                 echo 'Testing..'
-                    /*sh '''pio account logout || true 
-                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test --without-uploading''']*/
+                    sh '''pio account logout || true 
+                       PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test -e uno_lrv -vvv'''
             }
         }
         stage('Tagging qa') {
