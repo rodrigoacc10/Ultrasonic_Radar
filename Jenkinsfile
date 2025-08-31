@@ -36,8 +36,7 @@ pipeline {
         stage('HW Test') {
             steps {
                 echo 'Testing..'
-                    sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
-                    sh '''pio remote test -e uno_lrv -vvv'''
+                    sh '''pio account logout || true PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test -e uno_lrv -vvv'''
             }
         }
         stage('Tagging qa') {
