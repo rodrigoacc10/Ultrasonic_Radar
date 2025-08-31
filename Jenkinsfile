@@ -5,10 +5,10 @@ pipeline {
         stage('Authentication') {
             steps {
                     script {
-                        def userInput = input(id: 'myInput', message: 'Please select remote targeg:', parameters: [
-                        [$class: 'ChoiceParameterDefinition', name: 'Environment', choices: 'MX\nMCH', description: 'Choose the target environment']
+                        def userInput = input(id: 'myInput', message: 'Please select remote target:', parameters: [
+                        [$class: 'ChoiceParameterDefinition', name: 'target', choices: 'MX\nMCH', description: 'Choose the target environment']
                     ])
-                    def selectedEnvironment = userInput.Environment
+                    def selectedEnvironment = userInput.target
                     echo "Selected environment: ${selectedEnvironment}"
                     // Further actions based on the selected environment
                         if (selectedEnvironment == 'MX') {
