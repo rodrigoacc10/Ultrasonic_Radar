@@ -4,8 +4,25 @@ pipeline {
     stages {
         stage('Authentication') {
             steps {
-                echo 'Auth...'
-                       sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
+                    script {
+                        def userInput = input(id: 'myInput', message: 'Please select remote targeg:', parameters: [
+                        [$class: 'ChoiceParameterDefinition', name: 'Environment', choices: 'MX\nMCH', description: 'Choose the target environment']
+                    ])
+                    def selectedEnvironment = userInput.Environment
+                    echo "Selected environment: ${selectedEnvironment}"
+                    // Further actions based on the selected environment
+                        if (selectedEnvironment == 'MX') {
+                            echo "Deploying to MX..."
+                            sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
+                        } else if (selectedEnvironment == 'MCH') {
+                            echo "Deploying to MCH..."
+                            sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
+                        } else {
+                            echo "Deploying to Other"
+                            sh '''export PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN}'''
+                        }
+                    }
+                       
             }
         }
         stage('Build') {
