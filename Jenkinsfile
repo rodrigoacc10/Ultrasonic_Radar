@@ -14,10 +14,11 @@ pipeline {
                             choice(name: 'selectedOption', choices: 'Option A\nOption B\nOption C', description: 'Select one of the available options')
                         ]
                         )
-                    }
-                    // Access the selected value
+                                            // Access the selected value
                     def chosenValue = userInput.selectedOption
                     echo "You chose: ${chosenValue}"
+                    }
+
                        
             }
         }
