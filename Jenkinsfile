@@ -49,8 +49,8 @@ pipeline {
                     echo "Global variable value: ${env.GIT_REPO}"
                         withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
                             sh "git remote set-url origin https://${TOKEN}${env.GIT_REPO}"
-                            sh '''git push origin --tags'''*/
-                    }
+                            sh '''git push origin --tags'''
+                    }*/
             }
         }
         stage('Deploy') {
