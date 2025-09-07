@@ -1,4 +1,5 @@
 def TAG_VERSION
+def SELECTED_ENV
 pipeline {
     agent any
     stages {
@@ -12,6 +13,7 @@ pipeline {
                         parameters: [
                             choice(name: 'selectedOption', choices: 'Option A\nOption B\nOption C', description: 'Select one of the available options')
                         ]
+                        )
                     }
                     // Access the selected value
                     def chosenValue = userInput.selectedOption
