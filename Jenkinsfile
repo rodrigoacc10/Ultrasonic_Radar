@@ -8,17 +8,22 @@ pipeline {
                 echo 'Exporting token...'
                     script {
                         def userInput = input(
-                        id: 'myUserInput',
-                        message: 'Please choose an option:',
+                        id: 'myMultiOptionInput',
+                        message: 'Please select your desired options:',
                         parameters: [
-                            choice(name: 'selectedOption', choices: 'Option A\nOption B\nOption C', description: 'Select one of the available options')
+                            choice(
+                                name: 'selectedOptions',
+                                choices: """
+                                Option A
+                                Option B
+                                Option C
+                                """.stripIndent(),
+                                description: 'Choose one or more options'
+                            )
                         ]
-                        )
-                                            // Access the selected value
-                    def chosenValue = userInput.selectedOption
-                    echo "You chose: ${chosenValue}"
+                    )
+                    echo "You selected: ${userInput.selectedOptions}"
                     }
-
                        
             }
         }
