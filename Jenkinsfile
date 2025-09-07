@@ -3,28 +3,14 @@ def SELECTED_ENV
 pipeline {
     agent any
     stages {
-        stage('Authentication') {
+        stage('Selecting Environment') {
             steps {
                 echo 'Exporting token...'
                     script {
-                        def userInput = input(
-                        id: 'myMultiOptionInput',
-                        message: 'Please select your desired options:',
-                        parameters: [
-                            choice(
-                                name: 'selectedOptions',
-                                choices: """
-                                Option A
-                                Option B
-                                Option C
-                                """.stripIndent(),
-                                description: 'Choose one or more options'
-                            )
-                        ]
-                    )
-                    echo "You selected: ${userInput.selectedOptions}"
-                    }
-                       
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
+                }
+                echo "${env.RELEASE_SCOPE}"                
             }
         }
         stage('Build') {
