@@ -5,10 +5,10 @@ pipeline {
     stages {
         stage('Selecting Environment') {
             steps {
-                echo 'Exporting token...'
+                echo 'Selecting Environment...'
                     script {
-                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')]
                 }
                 echo "${env.RELEASE_SCOPE}"                
             }
