@@ -1,4 +1,5 @@
 def TAG_VERSION
+def SELECTED_ENV_TOKEN
 def SELECTED_ENV
 pipeline {
     agent any
@@ -8,15 +9,30 @@ pipeline {
                 echo 'Selecting Environment...'
                     script {
                     env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')]
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')] 
+                                if (selectedEnvironment == 'MX') {
+                                    echo "Using to MX..."
+                                    SELECTED_ENV = "uno_lrv"
+                                    SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
+                                } else if (selectedEnvironment == 'MCH') {
+                                    echo "Using to MCH..."
+                                    SELECTED_ENV = "uno"
+                                    SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
+                                } else {
+                                    echo "Deploying to Other"
+                                }      
                 }
+                echo "ENV: ${SELECTED_ENV}"
+                echo "ENV: ${SELECTED_ENV_TOKEN}"
                 echo "${env.RELEASE_SCOPE}"                
             }
         }
         stage('Build') {
             steps {
+                echo "ENV: ${SELECTED_ENV}"
+                echo "ENV: ${SELECTED_ENV_TOKEN}"
                 echo 'Building...'
-                       sh '''pio run -e uno_lrv -vvv'''
+                       //sh '''pio run -e uno_lrv -vvv'''
             }
         }
         stage('HW Test') {
