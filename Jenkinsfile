@@ -23,14 +23,12 @@ pipeline {
                                 }      
                 }
                 echo "ENV: ${SELECTED_ENV}"
-                echo "ENV: ${SELECTED_ENV_TOKEN}"
                 echo "${env.RELEASE_SCOPE}"                
             }
         }
         stage('Build') {
             steps {
-                echo "ENV: ${SELECTED_ENV}"
-                echo "ENV: ${SELECTED_ENV_TOKEN}"
+                
                 echo 'Building...'
                        //sh '''pio run -e uno_lrv -vvv'''
             }
@@ -38,7 +36,8 @@ pipeline {
         stage('HW Test') {
             steps {
                 echo 'Testing..'
-                    //sh '''pio account logout || true PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote test -e uno_lrv -vvv'''
+                echo "ENV: ${SELECTED_ENV}"
+                    sh "pio account logout || true PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('Tagging qa') {
