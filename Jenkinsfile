@@ -10,11 +10,11 @@ pipeline {
                     script {
                     env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')] 
-                                if (selectedEnvironment == 'MX') {
+                                if (env.RELEASE_SCOPE == 'MX') {
                                     echo "Using to MX..."
                                     SELECTED_ENV = "uno_lrv"
                                     SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
-                                } else if (selectedEnvironment == 'MCH') {
+                                } else if (env.RELEASE_SCOPE == 'MCH') {
                                     echo "Using to MCH..."
                                     SELECTED_ENV = "uno"
                                     SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
