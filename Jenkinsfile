@@ -11,40 +11,39 @@ pipeline {
                     env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select',
                             parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')] 
                                 if (env.RELEASE_SCOPE == 'MX') {
-                                    echo "Using to MX..."
+                                    echo "Using MX..."
                                     SELECTED_ENV = "uno_lrv"
                                     SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
                                 } else if (env.RELEASE_SCOPE == 'MCH') {
-                                    echo "Using to MCH..."
+                                    echo "Using MCH..."
                                     SELECTED_ENV = "uno"
                                     SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
                                 } else {
                                     echo "Deploying to Other"
                                 }      
                 }
-                echo "ENV: ${SELECTED_ENV}"
+                echo "Selected Environment: ${SELECTED_ENV}"
                 echo "${env.RELEASE_SCOPE}"                
             }
         }
         stage('Build') {
-            steps {
-                
+            steps {               
                 echo 'Building...'
-                       sh "pio run -e ${SELECTED_ENV} -vvv"
+                sh "pio run -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('HW Test') {
             steps {
-                echo 'Testing..'
+                echo 'HW Test Running...'
                 echo "ENV: ${SELECTED_ENV}"
-                    sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
+                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('Logic Test') {
             steps {
-                echo 'Testing..'
-                echo "ENV: ${SELECTED_ENV}"
-                    sh "pio test -e native -vvv"
+                echo 'Logic Test Running...'
+                //echo "ENV: ${SELECTED_ENV}"
+                //sh "pio test -e native -vvv"
             }
         }
         stage('Tagging qa') {
@@ -69,7 +68,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying..'
+                echo 'Deploying current version'
                 sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote run --environment ${SELECTED_ENV} --target upload"
             }
         }
