@@ -30,7 +30,7 @@ pipeline {
             steps {
                 
                 echo 'Building...'
-                       //sh '''pio run -e uno_lrv -vvv'''
+                       sh "pio run -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('HW Test') {
@@ -38,6 +38,13 @@ pipeline {
                 echo 'Testing..'
                 echo "ENV: ${SELECTED_ENV}"
                     sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
+            }
+        }
+        stage('Logic Test') {
+            steps {
+                echo 'Testing..'
+                echo "ENV: ${SELECTED_ENV}"
+                    sh "pio test -e native -vvv"
             }
         }
         stage('Tagging qa') {
@@ -52,19 +59,18 @@ pipeline {
                         echo "Generated version: ${TAG_VERSION}" 
                     }
                 echo 'Tagging branch'    
-                    /*sh "git tag ${TAG_VERSION}"
+                    sh "git tag ${TAG_VERSION}"
                     echo "Global variable value: ${env.GIT_REPO}"
                         withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
                             sh "git remote set-url origin https://${TOKEN}${env.GIT_REPO}"
                             sh '''git push origin --tags'''
-                    }*/
+                    }
             }
         }
         stage('Deploy') {
             steps {
                 echo 'Deploying..'
-                /*sh '''pio account logout || true 
-                PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run --environment uno --target upload'''*/
+                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote run --environment ${SELECTED_ENV} --target upload"
             }
         }
     }
