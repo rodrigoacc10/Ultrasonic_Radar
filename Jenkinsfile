@@ -17,7 +17,7 @@ pipeline {
                                 } else if (env.RELEASE_SCOPE == 'MCH') {
                                     echo "Using MCH..."
                                     SELECTED_ENV = "uno"
-                                    SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
+                                    SELECTED_ENV_TOKEN = MCH_PLATFORMIO_AUTH_TOKEN
                                 } else {
                                     echo "Deploying to Other"
                                 }      
@@ -78,5 +78,6 @@ pipeline {
     }
     environment {
     MX_PLATFORMIO_AUTH_TOKEN = credentials('MX_PLATFORMIO_AUTH_TOKEN')
+    MCH_PLATFORMIO_AUTH_TOKEN = credentials('MCH_PLATFORMIO_AUTH_TOKEN')
   }
 }
