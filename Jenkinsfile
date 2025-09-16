@@ -40,6 +40,9 @@ pipeline {
             }
         }
         stage('Logic Test') {
+             options {
+                    timeout(time: 5, unit: 'MINUTES') // Stage-specific timeout
+                }
             steps {
                 echo 'Logic Test Running...'
                 //echo "ENV: ${SELECTED_ENV}"
