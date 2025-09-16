@@ -43,7 +43,7 @@ pipeline {
             steps {
                 echo 'Logic Test Running...'
                 //echo "ENV: ${SELECTED_ENV}"
-                //sh "pio test -e native -vvv"
+                sh "pio test -e native -vvv"
             }
         }
         stage('Tagging qa') {
