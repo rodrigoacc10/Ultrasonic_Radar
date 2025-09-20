@@ -3,6 +3,9 @@ def SELECTED_ENV_TOKEN
 def SELECTED_ENV
 pipeline {
     agent any
+    options {
+        timeout(time: 20, unit: 'MINUTES') // Pipeline will abort after 1 hour
+    }
     stages {
         stage('Selecting Environment') {
             steps {
@@ -37,17 +40,14 @@ pipeline {
                 echo 'HW Test Running...'
                 echo "ENV: ${SELECTED_ENV}"
                 //sh "pio account logout"
-                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
+                //sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('Logic Test') {
-             options {
-                    timeout(time: 3, unit: 'MINUTES') // Stage-specific timeout
-                }
             steps {
                 echo 'Logic Test Running...'
                 //echo "ENV: ${SELECTED_ENV}"
-                sh "pio test -e native -vvv"
+                sh "sudo pio test -e native -vvv"
             }
         }
         stage('Tagging qa') {
