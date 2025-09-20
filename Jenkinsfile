@@ -36,12 +36,13 @@ pipeline {
             steps {
                 echo 'HW Test Running...'
                 echo "ENV: ${SELECTED_ENV}"
+                sh "pio account logout"
                 sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('Logic Test') {
              options {
-                    timeout(time: 5, unit: 'MINUTES') // Stage-specific timeout
+                    timeout(time: 3, unit: 'MINUTES') // Stage-specific timeout
                 }
             steps {
                 echo 'Logic Test Running...'
@@ -72,6 +73,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying current version'
+                sh "pio account logout"
                 sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote run --environment ${SELECTED_ENV} --target upload"
             }
         }
