@@ -40,7 +40,7 @@ pipeline {
                 echo 'HW Test Running...'
                 echo "ENV: ${SELECTED_ENV}"
                 //sh "pio account logout"
-                //sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
+                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
         stage('Logic Test') {
