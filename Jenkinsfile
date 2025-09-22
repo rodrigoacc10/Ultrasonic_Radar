@@ -1,53 +1,85 @@
 def TAG_VERSION
+def SELECTED_ENV_TOKEN
+def SELECTED_ENV
 pipeline {
     agent any
+    options {
+        timeout(time: 20, unit: 'MINUTES') // Pipeline will abort after 1 hour
+    }
     stages {
+        stage('Selecting Environment') {
+            steps {
+                echo 'Selecting Environment...'
+                    script {
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Select',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'MX\nMCH', description: 'Which environment do you want to use?')] 
+                                if (env.RELEASE_SCOPE == 'MX') {
+                                    echo "Using MX..."
+                                    SELECTED_ENV = "uno_lrv"
+                                    SELECTED_ENV_TOKEN = MX_PLATFORMIO_AUTH_TOKEN
+                                } else if (env.RELEASE_SCOPE == 'MCH') {
+                                    echo "Using MCH..."
+                                    SELECTED_ENV = "uno"
+                                    SELECTED_ENV_TOKEN = MCH_PLATFORMIO_AUTH_TOKEN
+                                } else {
+                                    echo "Deploying to Other"
+                                }      
+                }
+                echo "Selected Environment: ${SELECTED_ENV}"
+                echo "${env.RELEASE_SCOPE}"                
+            }
+        }
         stage('Build') {
-            steps {
+            steps {               
                 echo 'Building...'
-                       //sh '''pio account logout || true 
-                       //PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run -r ''' 
+                sh "pio run -e ${SELECTED_ENV} -vvv"
             }
         }
-        stage('Test') {
+        stage('HW Test') {
             steps {
-                echo 'Testing..'
+                echo 'HW Test Running...'
+                echo "ENV: ${SELECTED_ENV}"
+                //sh "pio account logout"
+                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote test -e ${SELECTED_ENV} -vvv"
             }
         }
-        stage('Tagging stable') {
+        stage('Logic Test') {
+            steps {
+                echo 'Logic Test Running...'
+                //echo "ENV: ${SELECTED_ENV}"
+                sh "pio test -e native -vvv"
+            }
+        }
+        stage('Tagging qa') {
             when {
-                branch 'stable' 
+                branch 'qa' 
             }
             steps {  
                 echo 'Creating Tag'            
-                script {
-                    def date = new Date().format("yyyy-MM-dd'T'HHmm") // Format the date as yyyy-MM-ddTHHmm
-                    TAG_VERSION = "jenkins-v-${date}"
-                    echo "Generated version: ${TAG_VERSION}" 
-                }
-                echo 'Tagging branch'    
-                sh "git tag ${TAG_VERSION}"
-                   withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
-                        sh '''git remote set-url origin https://${TOKEN}@github.com/lruizv/arduino_ultrasonic_radar.git'''
-                        sh '''git push origin --tags'''
+                    script {
+                        def date = new Date().format("yyyy-MM-dd'T'HHmm") // Format the date as yyyy-MM-ddTHHmm
+                        TAG_VERSION = "jenkins-v-${date}"
+                        echo "Generated version: ${TAG_VERSION}" 
                     }
-            }
-        }
-        stage('Retrieving open agents') {
-            steps {
-                echo 'Monitoring'
-                
+                echo 'Tagging branch'    
+                    sh "git tag ${TAG_VERSION}"
+                    echo "Global variable value: ${env.GIT_REPO}"
+                        withCredentials([string(credentialsId: 'github_token', variable: 'TOKEN')]) {
+                            sh "git remote set-url origin https://${TOKEN}${env.GIT_REPO}"
+                            sh '''git push origin --tags'''
+                    }
             }
         }
         stage('Deploy') {
             steps {
-                echo 'Deploying..'
-                //sh '''pio account logout || true 
-                //PLATFORMIO_AUTH_TOKEN=${MX_PLATFORMIO_AUTH_TOKEN} pio remote run --environment uno --target upload'''
+                echo 'Deploying current version'
+                //sh "pio account logout"
+                sh "PLATFORMIO_AUTH_TOKEN=${SELECTED_ENV_TOKEN} pio remote run --environment ${SELECTED_ENV} --target upload"
             }
         }
     }
     environment {
     MX_PLATFORMIO_AUTH_TOKEN = credentials('MX_PLATFORMIO_AUTH_TOKEN')
+    MCH_PLATFORMIO_AUTH_TOKEN = credentials('MCH_PLATFORMIO_AUTH_TOKEN')
   }
 }
